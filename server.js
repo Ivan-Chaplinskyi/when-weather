@@ -2,6 +2,9 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const app = require('./index');
+const botActions = require('./telegramBot/botActions');
+
+botActions.init();
 
 dotenv.config({ path: './config.env' });
 
