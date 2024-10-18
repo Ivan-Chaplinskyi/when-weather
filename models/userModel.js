@@ -17,16 +17,14 @@ const userSchema = new mongoose.Schema({
     name: {
       type: String,
       default: '',
-      require: true,
     },
-    lat: {
-      type: Number,
-      default: 0,
-    },
-    lon: {
-      type: Number,
-      default: 0,
-    },
+    region: String,
+    country: String,
+    lat: Number,
+    lon: Number,
+    tz_id: String,
+    localtime_epoch: Number,
+    localtime: String,
   },
 });
 
