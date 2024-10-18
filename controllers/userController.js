@@ -19,11 +19,11 @@ class UserController {
     }
   }
 
-  async updateUserCity(id, location) {
+  async updateLocation(id, location) {
     try {
-      await User.findOneAndUpdate({ id }, location, { new: true });
+      await User.findOneAndUpdate({ id }, { location });
     } catch (e) {
-      console.log(`Error updateUserCity: ${e}`);
+      console.log(`Error updateLocation: ${e}`);
     }
   }
 }
