@@ -1,0 +1,8 @@
+{
+    "sendWeather": {
+        "temp": "Temperature",
+        "wind_speed": "Wind speed",
+        "type_speed": "km/h",
+        "last_update": "Last update"
+    }
+}

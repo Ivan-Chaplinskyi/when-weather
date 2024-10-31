@@ -28,9 +28,9 @@ class Bot {
     }
   }
 
-  sendWeather(id, res) {
+  sendWeather(id, res, locale) {
     try {
-      bot.sendMessage(id, Message.sendWeather(res), {
+      bot.sendMessage(id, Message.sendWeather(res, locale), {
         parse_mode: 'HTML',
       });
     } catch (e) {
@@ -53,7 +53,7 @@ class Bot {
           case '🌦️Погода': {
             if (user.location.name) {
               const res = await weather.current(user.location.name);
-              return this.sendWeather(chat.id, res);
+              return this.sendWeather(chat.id, res, user.locale);
             }
             this.startCommand(chat);
             break;

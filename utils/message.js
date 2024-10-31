@@ -1,6 +1,9 @@
 /* eslint-disable camelcase */
+const locales = require('./locales');
+
 class Message {
-  sendWeather(res) {
+  sendWeather(res, locale = 'uk') {
+    locales.setLocale(locale);
     const {
       location: { name, country },
       current: {
@@ -11,7 +14,11 @@ class Message {
       },
     } = res;
 
-    return `🏙️ <b>${name}, ${country}</b>\n☁️${text}\n🌡️Температура: ${temp_c} °C\n🍃Швидкість вітру: ${wind_kph} км/год\n<b>Останнє оновлення:</b> <code>${last_updated}</code>`;
+    return `
+    🏙️ <b>${name}, ${country}</b>\n☁️${text}
+    \n🌡️${locales.__('sendWeather.temp')}: ${temp_c} °C
+    \n🍃${locales.__('sendWeather.wind_speed')}: ${wind_kph} ${locales.__('sendWeather.type_speed')}
+    \n<b>${locales.__('sendWeather.last_update')}:</b> <code>${last_updated}</code>`;
   }
 }
 
