@@ -10,10 +10,10 @@ class Weather {
     this.baseUrl = 'http://api.weatherapi.com/v1';
   }
 
-  async current(location) {
+  async current(location, locale) {
     try {
       const res = await fetch(
-        `${this.baseUrl}/current.json?key=${this.key}&q=${location}&lang=uk`,
+        `${this.baseUrl}/current.json?key=${this.key}&q=${location}&lang=${locale}`,
       );
       const data = await res.json();
       return data;

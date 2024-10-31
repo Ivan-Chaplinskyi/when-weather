@@ -2,7 +2,7 @@
 const locales = require('./locales');
 
 class Message {
-  sendWeather(res, locale = 'uk') {
+  sendWeather(res, locale) {
     locales.setLocale(locale);
     const {
       location: { name, country },
@@ -15,10 +15,13 @@ class Message {
     } = res;
 
     return `
-    🏙️ <b>${name}, ${country}</b>\n☁️${text}
+    🏙️ <b>${name}, ${country}</b>
+    \n☁️${text}
     \n🌡️${locales.__('sendWeather.temp')}: ${temp_c} °C
     \n🍃${locales.__('sendWeather.wind_speed')}: ${wind_kph} ${locales.__('sendWeather.type_speed')}
-    \n<b>${locales.__('sendWeather.last_update')}:</b> <code>${last_updated}</code>`;
+    \n<b>${locales.__('sendWeather.last_update')}:</b> <code>${last_updated}</code>`
+      .replace(/\n\s+/g, '\n')
+      .trim();
   }
 }
 

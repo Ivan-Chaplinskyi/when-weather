@@ -4,35 +4,34 @@ const weather = require('../apiWeather/apiWeather');
 const translator = require('../deepl/deepl');
 const Message = require('../utils/message');
 const UserController = require('../controllers/userController');
+const locale = require('../utils/locales');
+const keyboard = require('../utils/keyboard');
 
 class Bot {
   constructor(botTelegram) {
     this.bot = botTelegram;
   }
 
-  async startCommand(chat) {
+  async startCommand(chat, lang) {
     try {
+      locale.setLocale(lang);
       bot.sendMessage(
         chat.id,
-        'Будь ласка, додайте свою локацію.\nНаприклад: 🏙️<b>Київ, Україна</b>\nАбо просто надішліть ваше місце розташування📍',
-        {
-          parse_mode: 'HTML',
-          reply_markup: {
-            keyboard: [['🌦️Погода'] /*['⚙️Налаштування']*/],
-            resize_keyboard: true,
-          },
-        },
+        locale.__('add_location'),
+        keyboard.defaultKeyboard(lang),
       );
     } catch (e) {
       console.error(`Error startCommand: ${e}`);
     }
   }
 
-  sendWeather(id, res, locale) {
+  sendWeather(id, res, lang) {
     try {
-      bot.sendMessage(id, Message.sendWeather(res, locale), {
-        parse_mode: 'HTML',
-      });
+      bot.sendMessage(
+        id,
+        Message.sendWeather(res, lang),
+        keyboard.defaultKeyboard(lang),
+      );
     } catch (e) {
       console.error(`Error sendWeather: ${e}`);
     }
@@ -45,21 +44,30 @@ class Bot {
         let user = await UserController.getUser(from.id);
         if (!user) user = await UserController.addUser(from);
 
+        locale.setLocale(user.language_code);
+
         switch (text) {
           case '/start': {
-            this.startCommand(chat);
+            this.startCommand(chat, user.language_code);
             break;
           }
-          case '🌦️Погода': {
+          case `🌦️${locale.__('buttons.weather')}`: {
             if (user.location.name) {
-              const res = await weather.current(user.location.name);
-              return this.sendWeather(chat.id, res, user.locale);
+              const res = await weather.current(
+                user.location.name,
+                user.language_code,
+              );
+              return this.sendWeather(chat.id, res, user.language_code);
             }
-            this.startCommand(chat);
+            this.startCommand(chat, user.language_code);
             break;
           }
-          case '⚙️Налаштування': {
-            this.bot.sendMessage(chat.id, '⚙️Цей розділ у розробці!', {});
+          case `⚙️${locale.__('buttons.settings')}`: {
+            this.bot.sendMessage(
+              chat.id,
+              '⚙️Цей розділ у розробці!',
+              keyboard.defaultKeyboard(user.language_code),
+            );
             break;
           }
           default: {
@@ -69,9 +77,12 @@ class Bot {
 
             if (location) {
               await UserController.updateLocation(from.id, location);
-              return this.sendWeather(chat.id, res);
+              return this.sendWeather(chat.id, res, user.language_code);
             }
-            return this.bot.sendMessage(chat.id, 'Спробуйте ще раз🔍');
+            return this.bot.sendMessage(
+              chat.id,
+              `${locale.__('search.err')}🔍`,
+            );
           }
         }
       } catch (e) {
@@ -96,10 +107,10 @@ class Bot {
           await UserController.updateLocation(from.id, res.location);
           return this.sendWeather(chat.id, res);
         }
-        return this.bot.sendMessage(chat.id, 'Спробуйте ще раз🔍');
+        return this.bot.sendMessage(chat.id, `${locale.__('search.err')}🔍`);
       } catch (e) {
         console.error(`Error onLocation: ${e}`);
-        this.bot.sendMessage(chat.id, 'Виникла помилка❤️‍🩹');
+        this.bot.sendMessage(chat.id, `${locale.__('search.err')}🔍`);
       }
     });
   }
