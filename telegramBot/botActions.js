@@ -66,7 +66,19 @@ class Bot {
             this.bot.sendMessage(
               chat.id,
               '⚙️Цей розділ у розробці!',
-              keyboard.defaultKeyboard(user.language_code),
+              // keyboard.defaultKeyboard(user.language_code),
+              {
+                reply_markup: {
+                  inline_keyboard: [
+                    [
+                      {
+                        text: 'Українська',
+                        callback_data: 'click',
+                      },
+                    ],
+                  ],
+                },
+              },
             );
             break;
           }
