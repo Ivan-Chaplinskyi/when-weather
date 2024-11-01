@@ -6,7 +6,7 @@
     "search": {
         "err": "Search again"
     },
-    "add_location": "'Please add your location.\nFor example: 🏙️<b>Kyiv, Ukraine</b>\nOr just send your location📍'",
+    "add_location": "Please add your location.\nFor example: 🏙️<b>Kyiv, Ukraine</b>\nOr just send your location📍",
     "sendWeather": {
         "temp": "Temperature",
         "wind_speed": "Wind speed",
