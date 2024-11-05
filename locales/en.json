@@ -1,7 +1,15 @@
 {
     "buttons": {
-        "weather": "Weather",
-        "settings": "Settings"
+        "weather": "🌦️Weather",
+        "settings": "⚙️Settings"
+    },
+    "locales": {
+        "uk": "🇺🇦Українська",
+        "en": "🇬🇧English"
+    },
+    "settingsKeyboad": {
+        "change_lang": "Change language",
+        "lang_changed": "Changed language"
     },
     "search": {
         "err": "Search again"
