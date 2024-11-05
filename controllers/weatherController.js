@@ -5,7 +5,7 @@ dotenv.config({ path: './config.env' });
 
 const keyWeather = process.env.API_KEY_WEATHER;
 
-class Weather {
+class WeatherController {
   constructor(key) {
     this.key = key;
     this.baseUrl = 'http://api.weatherapi.com/v1';
@@ -37,4 +37,4 @@ class Weather {
   }
 }
 
-module.exports = new Weather(keyWeather);
+module.exports = new WeatherController(keyWeather);
