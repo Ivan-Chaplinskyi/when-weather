@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const dotenv = require('dotenv');
 
 dotenv.config({ path: './config.env' });
@@ -10,6 +11,19 @@ class Weather {
     this.baseUrl = 'http://api.weatherapi.com/v1';
   }
 
+  async findCoordinates(location) {
+    try {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_CLOUD_API}`,
+      );
+      const data = await res.json();
+      const { lat, lng } = data.results[0].geometry.location;
+      return { lat, lon: lng };
+    } catch (e) {
+      console.log(`Error Weather: ${e}`);
+    }
+  }
+
   async current(location, locale) {
     try {
       const res = await fetch(
@@ -18,7 +32,6 @@ class Weather {
       const data = await res.json();
       return data;
     } catch (e) {
-      // eslint-disable-next-line no-console
       console.log(`Error Weather: ${e}`);
     }
   }

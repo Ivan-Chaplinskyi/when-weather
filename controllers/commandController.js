@@ -4,7 +4,6 @@ const keyboard = require('../utils/keyboard');
 const bot = require('../telegramBot/telegramBotApi');
 const Message = require('../utils/message');
 const weather = require('../apiWeather/apiWeather');
-const translator = require('../deepl/deepl');
 const UserController = require('./userController');
 
 class CommandController {
@@ -45,15 +44,18 @@ class CommandController {
   }
 
   async initLocation(user, chat, text, from) {
-    const transed = await translator(text);
-    const res = await weather.current(transed);
-    const { location } = res;
+    try {
+      const location = await weather.findCoordinates(text);
+      if (!location) {
+        return bot.sendMessage(chat.id, locale.__('search.err'));
+      }
 
-    if (location) {
-      await UserController.updateLocation(from.id, location);
-      return this.sendWeather(chat.id, res, user.locale || user.language_code);
+      const res = await weather.current(`${location.lat}, ${location.lon}`);
+      this.sendWeather(chat.id, res, user.locale || user.language_code);
+      return await UserController.updateLocation(from.id, res.location);
+    } catch (e) {
+      console.log(`Error initLocation: ${e}`);
     }
-    return bot.sendMessage(chat.id, `${locale.__('search.err')}🔍`);
   }
 
   settings(chat, lang) {
