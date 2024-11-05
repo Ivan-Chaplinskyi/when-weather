@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 const bot = require('./telegramBotApi');
-const weather = require('../apiWeather/apiWeather');
+const WeatherController = require('../controllers/weatherController');
 const UserController = require('../controllers/userController');
 const CommandController = require('../controllers/commandController');
 const CallbackQuery = require('../controllers/callbackQueryController');
@@ -70,7 +70,7 @@ class Bot {
       try {
         const user = await UserController.initUser(from);
         const data = `${latitude},${longitude}`;
-        const res = await weather.current(data);
+        const res = await WeatherController.current(data);
         if (res.location) {
           CommandController.sendWeather(chat.id, res, user.language_code);
           await UserController.updateLocation(from.id, res.location);
