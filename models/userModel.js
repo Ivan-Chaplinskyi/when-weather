@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema({
   is_bot: Boolean,
   username: String,
   language_code: String,
+  locale: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
