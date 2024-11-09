@@ -38,6 +38,14 @@ class UserController {
     }
   }
 
+  async getUsers(param) {
+    try {
+      return await User.find(param);
+    } catch (e) {
+      console.log(`Error getUsers: ${e}`);
+    }
+  }
+
   async initUser(from) {
     try {
       let user = await this.getUser(from.id);

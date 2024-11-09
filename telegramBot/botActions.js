@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+const cron = require('node-cron');
+const moment = require('moment-timezone');
 const bot = require('./telegramBotApi');
 const WeatherController = require('../controllers/weatherController');
 const UserController = require('../controllers/userController');
@@ -84,7 +86,31 @@ class Bot {
     });
   }
 
+  onForecast() {
+    cron.schedule('0 * * * *', async () => {
+      const users = await UserController.getUsers({
+        'subscriptions.forecast': true,
+      });
+
+      users.forEach(async (user) => {
+        const userTime = moment.tz(
+          `${moment().format('YYYY-MM-DD')}T08:00:00`,
+          user.location.tz_id,
+        );
+        const currentTime = moment.tz(user.location.tz_id);
+
+        if (
+          currentTime.hours() === userTime.hours() &&
+          currentTime.minutes() === userTime.minutes()
+        ) {
+          bot.sendMessage(user.id, 'Forecast');
+        }
+      });
+    });
+  }
+
   init() {
+    this.onForecast();
     this.callbackQuery();
     this.onText();
     this.onLocation();
