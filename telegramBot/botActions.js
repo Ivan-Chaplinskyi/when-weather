@@ -110,7 +110,7 @@ class Bot {
   }
 
   init() {
-    this.onForecast();
+    // this.onForecast();
     this.callbackQuery();
     this.onText();
     this.onLocation();
