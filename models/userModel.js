@@ -29,6 +29,16 @@ const userSchema = new mongoose.Schema({
     localtime_epoch: Number,
     localtime: String,
   },
+  subscriptions: {
+    forecast: {
+      type: Boolean,
+      default: false,
+    },
+    alert: {
+      type: Boolean,
+      default: false,
+    },
+  },
 });
 
 const User = mongoose.model('User', userSchema);
